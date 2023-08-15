@@ -84,6 +84,7 @@ const RedditPosts = ({ subreddit, filter, darkMode }: RedditPostsProps) => {
       {posts && posts.length ? (
         <>
           <List
+            className="list"
             itemLayout="vertical"
             dataSource={posts.slice(0, itemsToShow)}
             renderItem={({ data }) => (
@@ -123,6 +124,7 @@ const RedditPosts = ({ subreddit, filter, darkMode }: RedditPostsProps) => {
           />
           {itemsToShow < posts.length && (
             <Button
+              id="more"
               className="selected"
               block
               type="primary"

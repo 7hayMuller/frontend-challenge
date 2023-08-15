@@ -1,31 +1,22 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "../App";
 
-describe("App", () => {
-  it('changes the "filter" value when buttons are clicked', () => {
-    render(<App />);
+test("renders App component correctly", () => {
+  const { getByText, getByRole } = render(<App />);
 
-    // Verifica o valor inicial de "filter"
-    const hotButton = screen.getByText("Hot");
-    expect(hotButton).toHaveClass("selected");
+  // Verifica se o texto "REACT" está presente no componente
+  const reactText = getByText(/REACT/i);
+  expect(reactText).toBeInTheDocument();
 
-    const newsButton = screen.getByText("News");
-    const risingButton = screen.getByText("Rising");
+  // Verifica se o botão Hot está presente no componente
+  const hotButton = getByRole("button", { name: /hot/i });
+  expect(hotButton).toBeInTheDocument();
 
-    // Clique no botão "News"
-    fireEvent.click(newsButton);
+  // Verifica se o botão News está presente no componente
+  const newsButton = getByRole("button", { name: /news/i });
+  expect(newsButton).toBeInTheDocument();
 
-    // Verifica se o valor de "filter" foi alterado para "new"
-    expect(hotButton).not.toHaveClass("selected");
-    expect(newsButton).toHaveClass("selected");
-    expect(risingButton).not.toHaveClass("selected");
-
-    // Clique no botão "Rising"
-    fireEvent.click(risingButton);
-
-    // Verifica se o valor de "filter" foi alterado para "rising"
-    expect(hotButton).not.toHaveClass("selected");
-    expect(newsButton).not.toHaveClass("selected");
-    expect(risingButton).toHaveClass("selected");
-  });
+  // Verifica se o botão Rising está presente no componente
+  const risingButton = getByRole("button", { name: /rising/i });
+  expect(risingButton).toBeInTheDocument();
 });

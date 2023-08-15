@@ -39,6 +39,7 @@ const App = () => {
           {" "}
           <Col>
             <Button
+              id="hot"
               className={filter === "hot" ? "selected" : "button"}
               onClick={() => setFilter("hot")}
             >
@@ -47,6 +48,7 @@ const App = () => {
           </Col>
           <Col>
             <Button
+              id="new"
               className={filter === "new" ? "selected" : "button"}
               onClick={() => setFilter("new")}
             >
@@ -55,6 +57,7 @@ const App = () => {
           </Col>
           <Col>
             <Button
+              id="rising"
               className={filter === "rising" ? "selected" : "button"}
               onClick={() => setFilter("rising")}
             >
