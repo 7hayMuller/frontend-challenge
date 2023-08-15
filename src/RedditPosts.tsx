@@ -18,7 +18,7 @@ interface Post {
 interface RedditPostsProps {
   subreddit: string;
   filter: string;
-  darkMode: boolean;
+  darkMode?: boolean;
 }
 
 const RedditPosts = ({ subreddit, filter, darkMode }: RedditPostsProps) => {
