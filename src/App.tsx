@@ -35,7 +35,7 @@ const App = () => {
             onChange={toggleDarkMode}
           />
         </Row>
-        <Row justify="center" gutter={[16, 8]}>
+        <Row justify="center" gutter={[16, 8]} wrap={false}>
           {" "}
           <Col>
             <Button
