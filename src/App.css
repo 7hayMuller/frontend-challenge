@@ -1,8 +1,31 @@
 body,
 html,
 #root {
+  font-family: Mulish;
   margin: 0;
   padding: 0;
+}
+
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  padding-inline: 50px;
+  line-height: 64px;
+  background-color: #6324c6;
+}
+
+.custom-header p {
+  color: #fff;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.custom-header p::after {
+  content: "JS";
+  color: #ffb800;
 }
 
 .ant-btn {
@@ -10,10 +33,59 @@ html,
   width: 202px;
   background-color: #6324c6;
   color: #fff;
-
-  font-family: Mulish;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+
+.ant-list-item-meta-title a:hover {
+  color: #6324c6 !important;
+}
+
+a.dark-mode {
+  color: #fff !important;
+}
+
+.ant-list .ant-list-item .ant-list-item-meta .ant-list-item-meta-description {
+  color: #4c5667;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.ant-list .ant-list-item .ant-list-item-meta .ant-list-item-meta-description p {
+  margin-top: -10px;
+}
+.description-author {
+  color: #6324c6;
+  margin-left: 5px;
+}
+
+.selected {
+  background-color: #6324c6;
+}
+
+.button {
+  background-color: #a7b0be;
+}
+
+.selected.ant-btn:hover {
+  background-color: #6324c6 !important;
+  color: #fff !important;
+  border-color: #6324c6 !important;
+}
+
+.button.ant-btn:hover {
+  background-color: #a7b0be !important;
+  color: #fff !important;
+  border-color: #a7b0be !important;
+}
+
+.ant-switch.ant-switch-checked .ant-switch-inner {
+  background-color: midnightblue;
+}
+
+.ant-switch-inner {
+  background-color: #ffb800;
 }

@@ -1,4 +1,5 @@
-import { Avatar, Button, List, Skeleton } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Avatar, Button, List, Modal, Row, Skeleton, Spin } from "antd";
 import { useEffect, useState } from "react";
 
 interface Data {
@@ -17,9 +18,10 @@ interface Post {
 interface RedditPostsProps {
   subreddit: string;
   filter: string;
+  darkMode: boolean;
 }
 
-const RedditPosts = ({ subreddit, filter }: RedditPostsProps) => {
+const RedditPosts = ({ subreddit, filter, darkMode }: RedditPostsProps) => {
   const [itemsToShow, setItemsToShow] = useState(10);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,59 +50,100 @@ const RedditPosts = ({ subreddit, filter }: RedditPostsProps) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://www.reddit.com/r/${subreddit}/${filter}.json`, {
-      headers: { Accept: "application/json" },
-    }).then((res) => {
-      if (res.status !== 200) {
-        console.warn("Warning: Something is wrong with the api.");
-        setLoading(false);
-        return;
-      }
-      res.json().then(({ data }) => {
-        if (data != null) {
-          setPosts(data.children);
-          setLoading(false);
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `https://www.reddit.com/r/${subreddit}/${filter}.json`,
+          {
+            headers: { Accept: "application/json" },
+          }
+        );
+
+        if (!response.ok) {
+          Modal.error({ content: "Ocorreu um erro inesperado :(" });
+          return;
         }
-      });
-    });
+
+        const jsonData = await response.json();
+        if (jsonData.data) {
+          setItemsToShow(10);
+          setPosts(jsonData.data.children);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
   }, [subreddit, filter]);
 
   return (
     <>
-      <List
-        itemLayout="vertical"
-        dataSource={posts.slice(0, itemsToShow)}
-        renderItem={({ data }) => (
-          <List.Item>
-            <Skeleton
-              avatar={{ shape: "square", size: "large" }}
-              title={false}
-              loading={loading}
-              active
+      {posts && posts.length ? (
+        <>
+          <List
+            itemLayout="vertical"
+            dataSource={posts.slice(0, itemsToShow)}
+            renderItem={({ data }) => (
+              <List.Item>
+                <Skeleton
+                  avatar={{ shape: "square", size: "large" }}
+                  title={false}
+                  loading={loading}
+                  active
+                >
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar shape="square" size={64} src={data.media} />
+                    }
+                    title={
+                      <a
+                        className={darkMode ? "dark-mode" : ""}
+                        href={`https://www.reddit.com${data.permalink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {data.title}
+                      </a>
+                    }
+                    description={
+                      <Row>
+                        <p>{`enviado ${formatTimeElapsed(
+                          Number(data.created)
+                        )} por`}</p>
+                        <p className="description-author">{`${data.author}`}</p>
+                      </Row>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
+          {itemsToShow < posts.length && (
+            <Button
+              className="selected"
+              block
+              type="primary"
+              onClick={loadMore}
             >
-              <List.Item.Meta
-                avatar={<Avatar shape="square" size={64} src={data.media} />}
-                title={
-                  <a
-                    href={`https://www.reddit.com${data.permalink}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {data.title}
-                  </a>
-                }
-                description={`enviado ${formatTimeElapsed(
-                  Number(data.created)
-                )} por ${data.author}`}
+              + Ver mais
+            </Button>
+          )}
+        </>
+      ) : (
+        <Row align="middle" justify="center" style={{ marginTop: "20%" }}>
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{ fontSize: 50, color: "#6324c6" }}
+                spin
               />
-            </Skeleton>
-          </List.Item>
-        )}
-      />
-      {itemsToShow < posts.length && (
-        <Button block type="primary" onClick={loadMore}>
-          + Ver mais
-        </Button>
+            }
+            size="large"
+          />
+        </Row>
       )}
     </>
   );
